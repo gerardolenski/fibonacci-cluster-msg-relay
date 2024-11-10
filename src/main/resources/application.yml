@@ -1,0 +1,2 @@
+server:
+  port: ${TOMCAT_PORT:8123}
