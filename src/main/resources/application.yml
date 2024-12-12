@@ -1,2 +1,59 @@
 server:
   port: ${TOMCAT_PORT:8123}
+
+outbox:
+  bulk-size: ${OUTBOX_BULK_SIZE:100}
+
+scheduler:
+  is-enabled: true
+  initial-delay: ${SCHEDULER_INIT_DELAY_MS:1000}
+  fixed-rate: ${SCHEDULER_FIXED_RATE_MS:1000}
+
+mq:
+  job-queue-name: ${JOB_QUEUE_NAME}
+
+spring:
+  # Artemis broker
+  artemis:
+    mode: native
+    broker-url: ${BROKER_URL}
+    user: ${BROKER_USER}
+    password: ${BROKER_PASSWORD}
+
+  # PostgreSQL database
+  datasource:
+    url: ${POSTGRES_DATASOURCE_URL}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+    hikari:
+      maximum-pool-size: ${POSTGRESS_POOL_SIZE:5}
+      connection-timeout: ${POSTGRESS_CONNECTION_TIMEOUT:5000}
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+    open-in-view: false
+  jms:
+    cache:
+      session-cache-size: ${JMS_SESSION_CACHE_SIZE:5}
+  task:
+    scheduling:
+      pool:
+        size: 10
+
+management:
+  endpoint:
+    health:
+      show-details: always
+      probes:
+        enabled: true
+      group:
+        liveness:
+          include: ping
+        readiness:
+          include: db, jms, diskSpace
+
+logging:
+  level:
+    root: info
+    org.gol: ${LOGGING_LEVEL:info}
